@@ -7,7 +7,7 @@ export default function App() {
   return (
     <Router
       root={props => (
-        <main>
+        <main class="min-h-screen">
           <Suspense>{props.children}</Suspense>
         </main>
       )}

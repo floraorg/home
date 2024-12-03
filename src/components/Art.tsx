@@ -49,7 +49,7 @@ const AsciiArtComponent: Component<AsciiArtComponentProps> = (props) => {
   };
 
   return (
-    <div class="ascii-art-container text-[4px] leading-[2px] text-rose-400/50 mt-12  text-center">
+    <div class="ascii-art-container h-screen flex justify-center items-center w-full text-[4px] leading-[2px] text-rose-400/50 text-center">
       <pre class="ascii-art">{asciiArt()}</pre>
     </div>
   );

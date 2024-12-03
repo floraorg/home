@@ -20,7 +20,7 @@ h3 {
 }
 
 body {
-  @apply bg-neutral-950 text-neutral-100 flex justify-center items-center flex-col p-6 md:p-12 lg:p-16;
+  @apply bg-neutral-950 text-neutral-100 flex justify-center items-center flex-col;
 }
 
 #app {
