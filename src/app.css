@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: "Geist Mono", sans-serif;
+}
+
+h1 {
+  @apply text-3xl md:text-4xl my-3 font-bold text-neutral-100;
+}
+
+h2 {
+  @apply text-2xl md:text-3xl my-3 font-bold;
+}
+
+h3 {
+  @apply text-xl md:text-2xl my-3 font-bold;
+}
+
+body {
+  @apply bg-neutral-950 text-neutral-100 flex justify-center items-center flex-col p-6 md:p-12 lg:p-16;
+}
+
+#app {
+  @apply md:w-2/3 w-full lg:w-1/2 leading-8 text-neutral-300 text-[16px] md:text-[18px];
+}
