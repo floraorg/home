@@ -24,8 +24,6 @@ jobs:
 
       - name: build
         run: bun run build
-        env:
-          BASE_PATH: "/home"
 
       - name: upload artifact
         uses: actions/upload-pages-artifact@v3.0.1
