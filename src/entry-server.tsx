@@ -7,8 +7,9 @@ export default createHandler(() => (
       <html lang="en">
         <head>
           <meta charset="utf-8" />
+          <title>~/org/flora</title>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <link rel="icon" href="/favicon.ico" />
+          <link rel="icon" href="/image.png" />
           {assets}
         </head>
         <body>

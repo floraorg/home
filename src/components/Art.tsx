@@ -20,7 +20,6 @@ const AsciiArtComponent: Component<AsciiArtComponentProps> = (props) => {
   const imageToAscii = (img: HTMLImageElement, maxWidth: number, maxHeight: number) => {
     const chars = ['@', '#', 'S', '%', '?', '*', '+', ';', ':', ',', '.'];
     const canvas = document.createElement('canvas');
-    const aspectRatio = img.width / img.height;
     const width = Math.min(img.width, maxWidth);
     const height = Math.min(img.height, maxHeight);
     canvas.width = width;
@@ -49,8 +48,9 @@ const AsciiArtComponent: Component<AsciiArtComponentProps> = (props) => {
   };
 
   return (
-    <div class="ascii-art-container h-screen flex justify-center items-center w-full text-[4px] leading-[2px] text-rose-400/50 text-center">
-      <pre class="ascii-art">{asciiArt()}</pre>
+    <div class="ascii-art-container h-screen flex justify-center flex-col items-center w-full text-[3.2px] leading-[1.6px] text-rose-400/80 text-center">
+      <pre class="ascii-art select-none">{asciiArt()}</pre>
+      <p class="text-xl my-12 text-white font-bold">FLORA ORGANIZATION</p>
     </div>
   );
 };
