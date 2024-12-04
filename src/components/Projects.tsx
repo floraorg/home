@@ -7,6 +7,9 @@ export default function Projects() {
           <div class="p-4 bg-neutral-950">
             <div class="flex justify-between">
               <p class="text-neutral-300">⭐ aster</p>
+              <a href="" class="text-sm">
+                wip
+              </a>
             </div>
             <p class="text-sm">a much more easy to use and painless alternative to the default youtube studio.</p>
           </div>
@@ -17,12 +20,12 @@ export default function Projects() {
           <img src="https://i.imgur.com/AtDcSFO.png" class="w-full opacity-60 group-hover:opacity-100 transition h-[18rem] object-cover" alt="" />
           <div class="p-4 bg-neutral-950">
             <div class="flex justify-between">
-              <p class="text-neutral-300">🌺 Orchid</p>
+              <p class="text-neutral-300">🌺 orchid</p>
               <a href="https://orchid.rex.wf" class="text-sm">
                 visit beta!
               </a>
             </div>
-            <p class="text-sm">a fast meme and profile picture editor packed with features and CAN run on low end devices.</p>
+            <p class="text-sm">a fast meme and profile picture editor packed with features, optimized to run on low end devices.</p>
           </div>
         </div>
       </div>
