@@ -50,7 +50,6 @@ const AsciiArtComponent: Component<AsciiArtComponentProps> = (props) => {
   return (
     <div class="ascii-art-container h-screen flex justify-center flex-col items-center w-full text-[3.2px] leading-[1.6px] text-rose-400/80 text-center">
       <pre class="ascii-art select-none">{asciiArt()}</pre>
-      <p class="text-xl my-12 text-white font-bold">FLORA ORGANIZATION</p>
     </div>
   );
 };
