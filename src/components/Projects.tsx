@@ -17,7 +17,7 @@ export default function Projects() {
       <div class="p-4 bg-neutral-950">
       <div class="flex justify-between">
         <p class="text-neutral-300">🌺 Orchid</p>
-        <a href="https://orchid.rex.wf" class="text-sm">visit!</a>
+        <a href="https://orchid.rex.wf" class="text-sm">visit beta!</a>
       </div>
       <p class="text-sm">a fast meme and profile picture editor packed with features and CAN run on low end devices.</p>
       </div>
