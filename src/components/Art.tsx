@@ -1,4 +1,4 @@
-import { Component, createSignal, onMount } from 'solid-js';
+import {Component, createSignal, onMount} from "solid-js";
 
 interface AsciiArtComponentProps {
   imagePath: string;
@@ -7,7 +7,7 @@ interface AsciiArtComponentProps {
 }
 
 const AsciiArtComponent: Component<AsciiArtComponentProps> = (props) => {
-  const [asciiArt, setAsciiArt] = createSignal('');
+  const [asciiArt, setAsciiArt] = createSignal("");
 
   onMount(() => {
     const img = new Image();
@@ -18,16 +18,16 @@ const AsciiArtComponent: Component<AsciiArtComponentProps> = (props) => {
   });
 
   const imageToAscii = (img: HTMLImageElement, maxWidth: number, maxHeight: number) => {
-    const chars = ['@', '#', 'S', '%', '?', '*', '+', ';', ':', ',', '.'];
-    const canvas = document.createElement('canvas');
+    const chars = ["@", "#", "S", "%", "?", "*", "+", ";", ":", ",", "."];
+    const canvas = document.createElement("canvas");
     const width = Math.min(img.width, maxWidth);
     const height = Math.min(img.height, maxHeight);
     canvas.width = width;
     canvas.height = height;
-    const ctx = canvas.getContext('2d')!;
+    const ctx = canvas.getContext("2d")!;
     ctx.drawImage(img, 0, 0, width, height);
     const data = ctx.getImageData(0, 0, width, height).data;
-    let art = '';
+    let art = "";
     const saturation = 1;
     for (let y = 0; y < height; y++) {
       for (let x = 0; x < width; x++) {
@@ -37,12 +37,12 @@ const AsciiArtComponent: Component<AsciiArtComponentProps> = (props) => {
         const b = Math.min(255, data[i + 2] * saturation);
         const a = data[i + 3];
         if (a === 0) {
-          art += ' ';
+          art += " ";
         } else {
-          art += chars[Math.floor((r + g + b) / 3 / 255 * (chars.length - 1))];
+          art += chars[Math.floor(((r + g + b) / 3 / 255) * (chars.length - 1))];
         }
       }
-      art += '\n';
+      art += "\n";
     }
     return art;
   };
