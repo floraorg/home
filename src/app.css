@@ -8,15 +8,15 @@
 }
 
 h1 {
-  @apply text-3xl md:text-4xl my-3 font-semibold text-neutral-100;
+  @apply text-3xl md:text-4xl my-4 font-semibold text-neutral-100;
 }
 
 h2 {
-  @apply text-2xl md:text-3xl my-3 font-semibold;
+  @apply text-2xl md:text-3xl my-4 font-semibold;
 }
 
 h3 {
-  @apply text-xl md:text-2xl my-3 font-bold;
+  @apply text-xl md:text-2xl my-4 font-bold;
 }
 
 body {
@@ -24,7 +24,7 @@ body {
 }
 
 #app {
-  @apply w-full md:w-3/5 leading-8 text-neutral-200 text-[16px] md:text-[18px];
+  @apply w-full md:w-3/5 lg:w-1/2 leading-9 text-neutral-200 text-[16px] md:text-[18px];
 }
 
 .main {
@@ -36,5 +36,21 @@ ol {
 }
 
 a {
-  @apply text-neutral-400  hover:text-neutral-100;
+  @apply text-neutral-400 transition-colors duration-200 hover:text-neutral-100;
+}
+
+.divider {
+  @apply w-full h-[1px] my-4 bg-gradient-to-r from-neutral-800 via-neutral-700 to-neutral-800;
+}
+
+.project-card {
+  @apply border border-neutral-800 hover:border-neutral-700 transition-all duration-300 hover:translate-y-[-4px];
+}
+
+.team-avatar {
+  @apply transition-transform duration-200 hover:scale-110;
+}
+
+.mdx-content > * {
+  @apply my-6;
 }
