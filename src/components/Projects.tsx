@@ -25,7 +25,7 @@ export default function Projects() {
                 visit beta!
               </a>
             </div>
-            <p class="text-sm text-neutral-400">a fast meme and profile picture editor packed with features, optimized to run on low end devices.</p>
+            <p class="text-sm text-neutral-400">a meme and pfp editor packed with features, built to run on low end devices.</p>
           </div>
         </div>
       </div>
