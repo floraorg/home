@@ -8,10 +8,8 @@ export default function App() {
     <Router
       base={import.meta.env.SERVER_BASE_URL}
       root={(props) => (
-        <main class="main min-h-screen flex flex-col">
-          <div class="grow mdx-content">
-            <Suspense fallback={<div class="flex items-center justify-center min-h-screen"></div>}>{props.children}</Suspense>
-          </div>
+        <main class="fixed">
+          <Suspense>{props.children}</Suspense>
         </main>
       )}>
       <FileRoutes />
