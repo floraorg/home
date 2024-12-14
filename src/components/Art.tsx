@@ -1,4 +1,4 @@
-import {Component, createSignal, onMount} from "solid-js";
+import { Component, createSignal, onMount } from "solid-js";
 
 interface AsciiArtComponentProps {
   imagePath: string;
@@ -13,11 +13,17 @@ const AsciiArtComponent: Component<AsciiArtComponentProps> = (props) => {
     const img = new Image();
     img.src = props.imagePath;
     img.onload = () => {
-      setAsciiArt(imageToAscii(img, props.maxWidth ?? 500, props.maxHeight ?? 1000));
+      setAsciiArt(
+        imageToAscii(img, props.maxWidth ?? 500, props.maxHeight ?? 1000),
+      );
     };
   });
 
-  const imageToAscii = (img: HTMLImageElement, maxWidth: number, maxHeight: number) => {
+  const imageToAscii = (
+    img: HTMLImageElement,
+    maxWidth: number,
+    maxHeight: number,
+  ) => {
     const chars = ["@", "#", "S", "%", "?", "*", "+", ";", ":", ",", "."];
     const canvas = document.createElement("canvas");
     const width = Math.min(img.width, maxWidth);
@@ -39,7 +45,8 @@ const AsciiArtComponent: Component<AsciiArtComponentProps> = (props) => {
         if (a === 0) {
           art += " ";
         } else {
-          art += chars[Math.floor(((r + g + b) / 3 / 255) * (chars.length - 1))];
+          art +=
+            chars[Math.floor(((r + g + b) / 3 / 255) * (chars.length - 1))];
         }
       }
       art += "\n";
@@ -48,7 +55,7 @@ const AsciiArtComponent: Component<AsciiArtComponentProps> = (props) => {
   };
 
   return (
-    <div class="ascii-art-container h-screen flex justify-center flex-col items-center w-full text-[3.2px] leading-[1.6px] text-rose-400/80 text-center">
+    <div class="ascii-art-container absolute text-[2.5px] leading-[1.2px] text-rose-700/80 text-center">
       <pre class="ascii-art select-none">{asciiArt()}</pre>
     </div>
   );
