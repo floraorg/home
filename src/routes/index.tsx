@@ -4,9 +4,9 @@ export default function Home() {
   return (
     <div class="w-full flex justify-center overflow-x-hidden">
       <div class="h-screen w-full p-6 md:w-2/3 flex flex-col items-center justify-center">
-        <Art imagePath="/public/imagewbg.png" />
+        <Art imagePath="/imagewbg.png" />
         <div class="flex w-full items-center gap-4">
-          <img src="/public/image.png" alt="logo" class="h-12" />
+          <img src="/image.png" alt="logo" class="h-12" />
           <h1 class="text-white text-2xl md:text-3xl font-bold">Flora</h1>
         </div>
         <p class="text-white z-[10] self-start text-left text-lg md:text-xl leading-8 mt-6 mb-3">
