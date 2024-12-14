@@ -25,7 +25,7 @@ export default function Home() {
         </div>
         <div class="divider px-2 pt-[1px] bg-neutral-800 my-3"></div>
         <p class="text-sm text-left self-start z-[10]">
-          Founded by <a href="https://namishh.me">nam</a> and <a href="https://rex.me">rex</a>. Follow us on <a href="https://github.com/floraorg">github</a>.
+          Founded by <a href="https://namishh.me">nam</a> and <a href="https://rex.wf">rex</a>. Follow us on <a href="https://github.com/floraorg">GitHub</a>.
         </p>
       </div>
     </div>
