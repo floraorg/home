@@ -55,7 +55,7 @@ const AsciiArtComponent: Component<AsciiArtComponentProps> = (props) => {
   };
 
   return (
-    <div class="ascii-art-container absolute text-[2.5px] leading-[1.2px] text-rose-700/80 text-center">
+    <div class="ascii-art-container absolute text-[2.5px] leading-[1.2px] text-rose-600/80 text-center">
       <pre class="ascii-art select-none">{asciiArt()}</pre>
     </div>
   );
