@@ -1,4 +1,4 @@
-import {Component, createSignal, onMount} from "solid-js";
+import { Component, createSignal, onMount, onCleanup } from "solid-js";
 
 interface AsciiArtComponentProps {
   imagePath: string;
@@ -8,16 +8,13 @@ interface AsciiArtComponentProps {
 
 const AsciiArtComponent: Component<AsciiArtComponentProps> = (props) => {
   const [asciiArt, setAsciiArt] = createSignal("");
+  const [scale, setScale] = createSignal(1);
 
-  onMount(() => {
-    const img = new Image();
-    img.src = props.imagePath;
-    img.onload = () => {
-      setAsciiArt(imageToAscii(img, props.maxWidth ?? 500, props.maxHeight ?? 1000));
-    };
-  });
-
-  const imageToAscii = (img: HTMLImageElement, maxWidth: number, maxHeight: number) => {
+  const imageToAscii = (
+    img: HTMLImageElement,
+    maxWidth: number,
+    maxHeight: number,
+  ) => {
     const chars = ["@", "#", "S", "%", "?", "*", "+", ";", ":", ",", "."];
     const canvas = document.createElement("canvas");
     const width = Math.min(img.width, maxWidth);
@@ -39,7 +36,8 @@ const AsciiArtComponent: Component<AsciiArtComponentProps> = (props) => {
         if (a === 0) {
           art += " ";
         } else {
-          art += chars[Math.floor(((r + g + b) / 3 / 255) * (chars.length - 1))];
+          art +=
+            chars[Math.floor(((r + g + b) / 3 / 255) * (chars.length - 1))];
         }
       }
       art += "\n";
@@ -47,9 +45,51 @@ const AsciiArtComponent: Component<AsciiArtComponentProps> = (props) => {
     return art;
   };
 
+  onMount(() => {
+    const img = new Image();
+    img.src = props.imagePath;
+    img.onload = () => {
+      setAsciiArt(
+        imageToAscii(img, props.maxWidth ?? 500, props.maxHeight ?? 1000),
+      );
+    };
+
+    const handleResize = () => {
+      setScale(window.devicePixelRatio || 1);
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    window.addEventListener("zoom", handleResize);
+
+    onCleanup(() => {
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("zoom", handleResize);
+    });
+  });
+
   return (
-    <div class="ascii-art-container absolute text-[2.5px] leading-[1.2px] text-rose-600/60 text-center">
-      <pre class="ascii-art select-none">{asciiArt()}</pre>
+    <div
+      class="ascii-art-container absolute text-center text-rose-800/90"
+      style={{
+        "font-size": `${2.5 / scale()}px`,
+        "line-height": `${1.2 / scale()}px`,
+        "letter-spacing": `0`,
+        "font-family": "monospace",
+        "white-space": "pre",
+        display: "inline-block",
+      }}
+    >
+      <pre
+        class="ascii-art select-none"
+        style={{
+          margin: "0",
+          padding: "0",
+        }}
+      >
+        {asciiArt()}
+      </pre>
     </div>
   );
 };
