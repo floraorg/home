@@ -9,7 +9,7 @@ export default createHandler(() => (
           <meta charset="utf-8" />
           <title>~/org/flora</title>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <link rel="icon" href="/image.png" />
+          <link rel="icon" href="/favicon.png" />
 
           <meta name="title" content="~/org/flora" />
           <meta name="description" content="random utilities for the web" />
