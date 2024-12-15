@@ -71,7 +71,7 @@ const AsciiArtComponent: Component<AsciiArtComponentProps> = (props) => {
 
   return (
     <div
-      class="ascii-art-container absolute text-center text-rose-800/90"
+      class="ascii-art-container absolute text-center text-rose-700 md:text-rose-800/90"
       style={{
         "font-size": `${2.5 / scale()}px`,
         "line-height": `${1.2 / scale()}px`,
