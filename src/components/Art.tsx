@@ -9,6 +9,9 @@ interface AsciiArtComponentProps {
 const AsciiArtComponent: Component<AsciiArtComponentProps> = (props) => {
   const [asciiArt, setAsciiArt] = createSignal("");
   const [scale, setScale] = createSignal(1);
+  const [windowWidth, setWindowWidth] = createSignal(
+    typeof window !== "undefined" ? window.innerWidth : 1024,
+  );
 
   const imageToAscii = (
     img: HTMLImageElement,
@@ -46,46 +49,63 @@ const AsciiArtComponent: Component<AsciiArtComponentProps> = (props) => {
   };
 
   onMount(() => {
-    const img = new Image();
-    img.src = props.imagePath;
-    img.onload = () => {
-      setAsciiArt(
-        imageToAscii(img, props.maxWidth ?? 500, props.maxHeight ?? 1000),
-      );
-    };
+    // Only run client-side code if window is available
+    if (typeof window !== "undefined") {
+      const img = new Image();
+      img.src = props.imagePath;
+      img.onload = () => {
+        setAsciiArt(
+          imageToAscii(img, props.maxWidth ?? 500, props.maxHeight ?? 1000),
+        );
+      };
 
-    const handleResize = () => {
-      setScale(window.devicePixelRatio || 1);
-    };
+      const handleResize = () => {
+        setScale(window.devicePixelRatio || 1);
+        setWindowWidth(window.innerWidth);
+      };
 
-    handleResize();
+      handleResize();
+      window.addEventListener("resize", handleResize);
+      window.addEventListener("zoom", handleResize);
 
-    window.addEventListener("resize", handleResize);
-    window.addEventListener("zoom", handleResize);
-
-    onCleanup(() => {
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("zoom", handleResize);
-    });
+      onCleanup(() => {
+        window.removeEventListener("resize", handleResize);
+        window.removeEventListener("zoom", handleResize);
+      });
+    }
   });
+
+  // Responsive font sizing logic
+  const calculateFontSize = () => {
+    const width = windowWidth();
+    if (width < 640) {
+      return `${2.3 / scale()}px`;
+    } else if (width < 768) {
+      return `${2.4 / scale()}px`;
+    }
+    return `${2.5 / scale()}px`;
+  };
 
   return (
     <div
-      class="ascii-art-container absolute text-center text-rose-700 md:text-rose-800/90"
+      class="ascii-art-container absolute text-center text-rose-700 md:text-rose-800/90 overflow-hidden"
       style={{
-        "font-size": `${2.5 / scale()}px`,
+        "font-size": calculateFontSize(),
         "line-height": `${1.2 / scale()}px`,
         "letter-spacing": `0`,
         "font-family": "monospace",
         "white-space": "pre",
+        "max-width": "100%",
+        "overflow-x": "auto",
         display: "inline-block",
       }}
     >
       <pre
-        class="ascii-art select-none"
+        class="ascii-art select-none overflow-hidden"
         style={{
           margin: "0",
           padding: "0",
+          "min-width": "100%",
         }}
       >
         {asciiArt()}
