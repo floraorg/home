@@ -7,6 +7,7 @@ interface AsciiArtComponentProps {
 }
 
 const AsciiArtComponent: Component<AsciiArtComponentProps> = (props) => {
+  const chars = ["@", "#", "S", "%", "?", "*", "+", ";", ":", ",", "."];
   const [asciiArt, setAsciiArt] = createSignal("");
   const [scale, setScale] = createSignal(1);
   const [windowWidth, setWindowWidth] = createSignal(
@@ -18,38 +19,45 @@ const AsciiArtComponent: Component<AsciiArtComponentProps> = (props) => {
     maxWidth: number,
     maxHeight: number,
   ) => {
-    const chars = ["@", "#", "S", "%", "?", "*", "+", ";", ":", ",", "."];
-    const canvas = document.createElement("canvas");
-    const width = Math.min(img.width, maxWidth);
-    const height = Math.min(img.height, maxHeight);
-    canvas.width = width;
-    canvas.height = height;
+    const canvas = new OffscreenCanvas(
+      Math.min(img.width, maxWidth),
+      Math.min(img.height, maxHeight),
+    );
     const ctx = canvas.getContext("2d")!;
-    ctx.drawImage(img, 0, 0, width, height);
-    const data = ctx.getImageData(0, 0, width, height).data;
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+
     let art = "";
-    const saturation = 1;
-    for (let y = 0; y < height; y++) {
-      for (let x = 0; x < width; x++) {
-        const i = (y * width + x) * 4;
+    const step = 1;
+    const saturation = 1.2;
+
+    for (let y = 0; y < canvas.height; y += step) {
+      let rowArt = "";
+      for (let x = 0; x < canvas.width; x += step) {
+        const i = (y * canvas.width + x) * 4;
         const r = Math.min(255, data[i] * saturation);
         const g = Math.min(255, data[i + 1] * saturation);
         const b = Math.min(255, data[i + 2] * saturation);
         const a = data[i + 3];
+
         if (a === 0) {
-          art += " ";
+          rowArt += " ";
         } else {
-          art +=
-            chars[Math.floor(((r + g + b) / 3 / 255) * (chars.length - 1))];
+          // More nuanced brightness calculation
+          const brightness = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+          const charIndex = Math.floor(brightness * (chars.length - 1));
+          rowArt += chars[charIndex];
         }
       }
-      art += "\n";
+      art += rowArt + "\n";
     }
+
     return art;
   };
 
   onMount(() => {
-    // Only run client-side code if window is available
     if (typeof window !== "undefined") {
       const img = new Image();
       img.src = props.imagePath;
@@ -88,7 +96,7 @@ const AsciiArtComponent: Component<AsciiArtComponentProps> = (props) => {
 
   return (
     <div
-      class="ascii-art-container absolute text-center text-rose-700 md:text-rose-800/90 overflow-hidden"
+      class="ascii-art-container absolute text-center text-rose-500 md:text-rose-600/90 overflow-hidden"
       style={{
         "font-size": calculateFontSize(),
         "line-height": `${1.2 / scale()}px`,
