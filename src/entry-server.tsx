@@ -35,7 +35,7 @@ export default createHandler(() => (
           <meta name="theme-color" content="#000000" />
           {assets}
         </head>
-        <body class="overflow-x-hidden">
+        <body >
           <div id="app">{children}</div>
           {scripts}
         </body>

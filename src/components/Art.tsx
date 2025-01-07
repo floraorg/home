@@ -1,125 +1,151 @@
-import { Component, createSignal, onMount, onCleanup } from "solid-js";
+import { Component, createSignal, createEffect } from 'solid-js';
 
-interface AsciiArtComponentProps {
-  imagePath: string;
-  maxWidth?: number;
-  maxHeight?: number;
+interface AsciiArtConverterProps {
+  filename: string;
 }
 
-const AsciiArtComponent: Component<AsciiArtComponentProps> = (props) => {
-  const chars = ["@", "#", "S", "%", "?", "*", "+", ";", ":", ",", "."];
-  const [asciiArt, setAsciiArt] = createSignal("");
-  const [scale, setScale] = createSignal(1);
-  const [windowWidth, setWindowWidth] = createSignal(
-    typeof window !== "undefined" ? window.innerWidth : 1024,
-  );
+const AsciiArtConverter: Component<AsciiArtConverterProps> = (props) => {
+  const [ascii, setAscii] = createSignal<string>('');
+  let canvasRef: HTMLCanvasElement | undefined;
 
-  const imageToAscii = (
-    img: HTMLImageElement,
-    maxWidth: number,
-    maxHeight: number,
-  ) => {
-    const canvas = new OffscreenCanvas(
-      Math.min(img.width, maxWidth),
-      Math.min(img.height, maxHeight),
-    );
-    const ctx = canvas.getContext("2d")!;
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const data = imageData.data;
-
-    let art = "";
-    const step = 1;
-    const saturation = 1.2;
-
-    for (let y = 0; y < canvas.height; y += step) {
-      let rowArt = "";
-      for (let x = 0; x < canvas.width; x += step) {
-        const i = (y * canvas.width + x) * 4;
-        const r = Math.min(255, data[i] * saturation);
-        const g = Math.min(255, data[i + 1] * saturation);
-        const b = Math.min(255, data[i + 2] * saturation);
-        const a = data[i + 3];
-
-        if (a === 0) {
-          rowArt += " ";
-        } else {
-          // More nuanced brightness calculation
-          const brightness = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-          const charIndex = Math.floor(brightness * (chars.length - 1));
-          rowArt += chars[charIndex];
-        }
-      }
-      art += rowArt + "\n";
+  const toGrayScale = (r: number, g: number, b: number, a: number): number | null => {
+    // Return null for transparent pixels (alpha < 0.1)
+    if (a < 25.5) { // 25.5 is 10% of 255
+      return null;
     }
-
-    return art;
+    return 0.21 * r + 0.72 * g + 0.07 * b;
   };
 
-  onMount(() => {
-    if (typeof window !== "undefined") {
-      const img = new Image();
-      img.src = props.imagePath;
-      img.onload = () => {
-        setAsciiArt(
-          imageToAscii(img, props.maxWidth ?? 500, props.maxHeight ?? 1000),
-        );
-      };
+  const getFontRatio = (): number => {
+    const pre = document.createElement('pre');
+    pre.style.display = 'inline';
+    pre.textContent = ' ';
+    document.body.appendChild(pre);
+    const { width, height } = pre.getBoundingClientRect();
+    document.body.removeChild(pre);
+    return height / width;
+  };
 
-      const handleResize = () => {
-        setScale(window.devicePixelRatio || 1);
-        setWindowWidth(window.innerWidth);
-      };
+  const convertToGrayScales = (
+    context: CanvasRenderingContext2D, 
+    width: number, 
+    height: number
+  ): (number | null)[] => {
+    const imageData = context.getImageData(0, 0, width, height);
+    const grayScales: (number | null)[] = [];
+    
+    for (let i = 0; i < imageData.data.length; i += 4) {
+      const r = imageData.data[i];
+      const g = imageData.data[i + 1];
+      const b = imageData.data[i + 2];
+      const a = imageData.data[i + 3];
+      const grayScale = toGrayScale(r, g, b, a);
+      
+      if (grayScale !== null) {
+        imageData.data[i] = imageData.data[i + 1] = imageData.data[i + 2] = grayScale;
+      }
+      grayScales.push(grayScale);
+    }
+    
+    context.putImageData(imageData, 0, 0);
+    return grayScales;
+  };
 
-      handleResize();
-      window.addEventListener("resize", handleResize);
-      window.addEventListener("zoom", handleResize);
+  const MAXIMUM_WIDTH = 80;
+  const MAXIMUM_HEIGHT = 80;
 
-      onCleanup(() => {
-        window.removeEventListener("resize", handleResize);
-        window.removeEventListener("zoom", handleResize);
-      });
+  const clampDimensions = (width: number, height: number): [number, number] => {
+    const rectifiedWidth = Math.floor(getFontRatio() * width);
+    if (height > MAXIMUM_HEIGHT) {
+      const reducedWidth = Math.floor(rectifiedWidth * MAXIMUM_HEIGHT / height);
+      return [reducedWidth, MAXIMUM_HEIGHT];
+    }
+    if (width > MAXIMUM_WIDTH) {
+      const reducedHeight = Math.floor(height * MAXIMUM_WIDTH / rectifiedWidth);
+      return [MAXIMUM_WIDTH, reducedHeight];
+    }
+    return [rectifiedWidth, height];
+  };
+
+  const grayRamp = '$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/|()1{}[]?-_+~<>i!lI;:,"^`\'. ';
+  const rampLength = grayRamp.length;
+
+  const getCharacterForGrayScale = (grayScale: number | null): string => {
+    if (grayScale === null) {
+      return ' '; // Return blank space for transparent pixels
+    }
+    return grayRamp[Math.ceil((rampLength - 1) * grayScale / 255)];
+  };
+
+  const drawAscii = (grayScales: (number | null)[], width: number): void => {
+    const ascii = grayScales.reduce((asciiImage: string, grayScale: number | null, index: number) => {
+      let nextChars = getCharacterForGrayScale(grayScale);
+      if ((index + 1) % width === 0) {
+        nextChars += '\n';
+      }
+      return asciiImage + nextChars;
+    }, '');
+    setAscii(ascii);
+  };
+
+  const processImage = (imageSrc: string): void => {
+    const image = new Image();
+    image.onload = () => {
+      if (!canvasRef) return;
+      
+      const context = canvasRef.getContext('2d');
+      if (!context) {
+        console.error('Could not get 2D context from canvas');
+        return;
+      }
+
+      const [width, height] = clampDimensions(image.width, image.height);
+      canvasRef.width = width;
+      canvasRef.height = height;
+      
+      // Clear canvas with transparent background
+      context.clearRect(0, 0, width, height);
+      context.drawImage(image, 0, 0, width, height);
+      
+      const grayScales = convertToGrayScales(context, width, height);
+      drawAscii(grayScales, width);
+    };
+
+    image.onerror = (error) => {
+      console.error('Error loading image:', error);
+    };
+
+    image.src = imageSrc;
+  };
+
+  createEffect(() => {
+    if (props.filename) {
+      processImage(props.filename);
     }
   });
 
-  // Responsive font sizing logic
-  const calculateFontSize = () => {
-    const width = windowWidth();
-    if (width < 640) {
-      return `${2.3 / scale()}px`;
-    } else if (width < 768) {
-      return `${2.4 / scale()}px`;
-    }
-    return `${2.5 / scale()}px`;
-  };
-
   return (
-    <div
-      class="ascii-art-container absolute text-center text-rose-500 md:text-rose-600/90 overflow-hidden"
-      style={{
-        "font-size": calculateFontSize(),
-        "line-height": `${1.2 / scale()}px`,
-        "letter-spacing": `0`,
-        "font-family": "monospace",
-        "white-space": "pre",
-        "max-width": "100%",
-        "overflow-x": "auto",
-        display: "inline-block",
-      }}
-    >
-      <pre
-        class="ascii-art select-none overflow-hidden"
-        style={{
-          margin: "0",
-          padding: "0",
-          "min-width": "100%",
+    <div>
+      <canvas 
+        ref={canvasRef} 
+        style={{ display: 'none' }}
+      />
+      <pre 
+        style={{ 
+          "font-family": "monospace",
+          "line-height": "1",
+          "letter-spacing": "0",
+          "font-size": "5.6px",
+          "white-space": "pre",
+          "background": "transparent"
         }}
+
+        class='text-rose-600 select-none'
       >
-        {asciiArt()}
+        {ascii()}
       </pre>
     </div>
   );
 };
 
-export default AsciiArtComponent;
+export default AsciiArtConverter;
