@@ -11,3 +11,13 @@
 .link {
   @apply text-neutral-400 hover:text-neutral-200 underline underline-offset-4 transition-colors duration-200; 
 }
+
+.retro {
+  background:  repeating-linear-gradient(
+    to bottom,
+    #1c1c1c66,
+    #1c1c1c66 1px,
+    transparent 2px,
+    transparent 6px
+  );
+}

@@ -8,8 +8,9 @@ export default function App() {
     <Router
       base={import.meta.env.SERVER_BASE_URL}
       root={(props) => (
-        <main>
+        <main class="min-h-screen bg-neutral-950">
           <Suspense>{props.children}</Suspense>
+          <div class="retro absolute top-0 left-0 h-full w-full z-[100] pointer-events-none"></div>
         </main>
       )}
     >
