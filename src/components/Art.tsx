@@ -135,12 +135,11 @@ const AsciiArtConverter: Component<AsciiArtConverterProps> = (props) => {
           "font-family": "monospace",
           "line-height": "1",
           "letter-spacing": "0",
-          "font-size": "5.6px",
           "white-space": "pre",
           "background": "transparent"
         }}
 
-        class='text-rose-600 select-none'
+        class='text-rose-600 text-[4px] md:text-[5.6px] select-none'
       >
         {ascii()}
       </pre>

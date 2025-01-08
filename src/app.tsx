@@ -10,7 +10,7 @@ export default function App() {
       root={(props) => (
         <main class="min-h-screen bg-neutral-950">
           <Suspense>{props.children}</Suspense>
-          <div class="retro absolute top-0 left-0 h-full w-full z-[100] pointer-events-none"></div>
+          <div class="retro absolute top-0 left-0 h-full w-full pointer-events-none"></div>
         </main>
       )}
     >
