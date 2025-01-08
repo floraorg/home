@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <div class="w-screen text-white h-screen flex justify-center items-center overflow-x-hidden">
       <div class="md:w-1/2 relative mb-12 sm:w-4/5 w-full lg:w-2/5 p-4">
-        <div class="absolute inset-0 top-0 flex items-center justify-center h-full w-full pointer-events-none opacity-60">
+        <div class="absolute inset-0 top-0 flex items-center justify-center h-full w-full pointer-events-none opacity-40 md:opacity-60">
           <AsciiArtConverter filename="/imagewbg.png"/>
         </div>
         
