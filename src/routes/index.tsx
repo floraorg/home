@@ -15,7 +15,7 @@ export default function Home() {
             <h1 class="text-2xl font-semibold">Flora</h1>
           </div>
           <p class="leading-6 mt-4 text-white">
-            We make random but practical utilities for the web that actually solve real problems. Current projects - <MagicLink href="https://orchird.rex.wf" previewImage="/orchid.png">
+            We make random but practical utilities for the web that actually solve real problems. Current projects - <MagicLink href="https://orchid.rex.wf" previewImage="/orchid.png">
               orchid (beta)
             </MagicLink> and  <MagicLink href="/" previewImage="/aster.png">aster (closed)</MagicLink>.
           </p>
