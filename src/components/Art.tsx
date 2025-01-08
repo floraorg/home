@@ -139,7 +139,7 @@ const AsciiArtConverter: Component<AsciiArtConverterProps> = (props) => {
           "background": "transparent"
         }}
 
-        class='text-rose-600 text-[4px] md:text-[5.6px] select-none'
+        class='text-rose-600 text-[3.6px] md:text-[5.6px] select-none'
       >
         {ascii()}
       </pre>
