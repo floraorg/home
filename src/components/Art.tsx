@@ -8,7 +8,12 @@ const AsciiArtConverter: Component<AsciiArtConverterProps> = (props) => {
   const [ascii, setAscii] = createSignal<string>("");
   let canvasRef: HTMLCanvasElement | undefined;
 
-  const toGrayScale = (r: number, g: number, b: number, a: number): number | null => {
+  const toGrayScale = (
+    r: number,
+    g: number,
+    b: number,
+    a: number
+  ): number | null => {
     // Return null for transparent pixels (alpha < 0.1)
     if (a < 25.5) {
       // 25.5 is 10% of 255
@@ -27,7 +32,11 @@ const AsciiArtConverter: Component<AsciiArtConverterProps> = (props) => {
     return height / width;
   };
 
-  const convertToGrayScales = (context: CanvasRenderingContext2D, width: number, height: number): (number | null)[] => {
+  const convertToGrayScales = (
+    context: CanvasRenderingContext2D,
+    width: number,
+    height: number
+  ): (number | null)[] => {
     const imageData = context.getImageData(0, 0, width, height);
     const grayScales: (number | null)[] = [];
 
@@ -39,7 +48,10 @@ const AsciiArtConverter: Component<AsciiArtConverterProps> = (props) => {
       const grayScale = toGrayScale(r, g, b, a);
 
       if (grayScale !== null) {
-        imageData.data[i] = imageData.data[i + 1] = imageData.data[i + 2] = grayScale;
+        imageData.data[i] =
+          imageData.data[i + 1] =
+          imageData.data[i + 2] =
+            grayScale;
       }
       grayScales.push(grayScale);
     }
@@ -54,17 +66,22 @@ const AsciiArtConverter: Component<AsciiArtConverterProps> = (props) => {
   const clampDimensions = (width: number, height: number): [number, number] => {
     const rectifiedWidth = Math.floor(getFontRatio() * width);
     if (height > MAXIMUM_HEIGHT) {
-      const reducedWidth = Math.floor((rectifiedWidth * MAXIMUM_HEIGHT) / height);
+      const reducedWidth = Math.floor(
+        (rectifiedWidth * MAXIMUM_HEIGHT) / height
+      );
       return [reducedWidth, MAXIMUM_HEIGHT];
     }
     if (width > MAXIMUM_WIDTH) {
-      const reducedHeight = Math.floor((height * MAXIMUM_WIDTH) / rectifiedWidth);
+      const reducedHeight = Math.floor(
+        (height * MAXIMUM_WIDTH) / rectifiedWidth
+      );
       return [MAXIMUM_WIDTH, reducedHeight];
     }
     return [rectifiedWidth, height];
   };
 
-  const grayRamp = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/|()1{}[]?-_+~<>i!lI;:,\"^`'. ";
+  const grayRamp =
+    "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/|()1{}[]?-_+~<>i!lI;:,\"^`'. ";
   const rampLength = grayRamp.length;
 
   const getCharacterForGrayScale = (grayScale: number | null): string => {
@@ -75,13 +92,16 @@ const AsciiArtConverter: Component<AsciiArtConverterProps> = (props) => {
   };
 
   const drawAscii = (grayScales: (number | null)[], width: number): void => {
-    const ascii = grayScales.reduce((asciiImage: string, grayScale: number | null, index: number) => {
-      let nextChars = getCharacterForGrayScale(grayScale);
-      if ((index + 1) % width === 0) {
-        nextChars += "\n";
-      }
-      return asciiImage + nextChars;
-    }, "");
+    const ascii = grayScales.reduce(
+      (asciiImage: string, grayScale: number | null, index: number) => {
+        let nextChars = getCharacterForGrayScale(grayScale);
+        if ((index + 1) % width === 0) {
+          nextChars += "\n";
+        }
+        return asciiImage + nextChars;
+      },
+      ""
+    );
     setAscii(ascii);
   };
 

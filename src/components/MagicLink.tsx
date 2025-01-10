@@ -24,7 +24,12 @@ const MagicLink: Component<MagicLinkProps> = (props) => {
 
   return (
     <>
-      <a ref={linkRef} href={props.href} class="link hover:underline relative" onMouseEnter={handleMouseEnter} onMouseLeave={() => setShowPreview(false)}>
+      <a
+        ref={linkRef}
+        href={props.href}
+        class="link hover:underline relative"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={() => setShowPreview(false)}>
         {props.children}
       </a>
 
@@ -39,7 +44,12 @@ const MagicLink: Component<MagicLinkProps> = (props) => {
               opacity: showPreview() ? "1" : "0",
             }}>
             <div class="bg-neutral-900 p-1 rounded-lg shadow-2xl">
-              <img src={props.previewImage} alt="Preview" class="rounded w-96 h-auto" style="max-height: 12rem" />
+              <img
+                src={props.previewImage}
+                alt="Preview"
+                class="rounded w-96 h-auto"
+                style="max-height: 12rem"
+              />
             </div>
           </div>
         </Portal>
