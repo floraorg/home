@@ -4,7 +4,7 @@ import { createHandler, StartServer } from "@solidjs/start/server";
 export default createHandler(() => (
   <StartServer
     document={({ assets, children, scripts }) => (
-      <html lang="en" class="dark">
+      <html lang="en" class="dark bg-black">
         <head>
           <meta charset="utf-8" />
           <title>~/org/flora</title>
@@ -35,7 +35,7 @@ export default createHandler(() => (
           <meta name="theme-color" content="#000000" />
           {assets}
         </head>
-        <body >
+        <body>
           <div id="app">{children}</div>
           {scripts}
         </body>

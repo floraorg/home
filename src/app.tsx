@@ -8,12 +8,11 @@ export default function App() {
     <Router
       base={import.meta.env.SERVER_BASE_URL}
       root={(props) => (
-        <main class="min-h-screen bg-neutral-950">
+        <main class="min-h-screen bg-neutral-950 overflow-hidden">
           <Suspense>{props.children}</Suspense>
           <div class="retro absolute top-0 left-0 h-full w-full pointer-events-none"></div>
         </main>
-      )}
-    >
+      )}>
       <FileRoutes />
     </Router>
   );
