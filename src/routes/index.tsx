@@ -33,7 +33,7 @@ export default function Home() {
             </a>{" "}
             and{" "}
             <a href="https://rex.wf" class="link hover:underline">
-              rex
+              mridul
             </a>
             . Follow us on{" "}
             <a href="https://twitter.com/floraorg" class="link hover:underline">
